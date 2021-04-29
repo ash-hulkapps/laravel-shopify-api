@@ -22,7 +22,67 @@ class ProductController extends Controller
 
     public function index ()
     {
-        $customers = Http::get($this->prepareUrl('https://{{api_key}}:{{api_password}}@{{store_name}}.myshopify.com/admin/api/{{api_version}}/customers.json'));
+        $query = 'mutation MyMutation($input: CustomerInput!) {
+                  customerUpdate(input: $input) {
+                    customer {
+                      firstName
+                      lastName
+                    }
+                    userErrors {
+                      field
+                      message
+                    }
+                  }
+                }
+                ';
+
+//        $query = '{
+//  products(first: 10) {
+//    edges {
+//      node {
+//        bodyHtml
+//        title
+//      }
+//    }
+//  }
+//}';
+
+//        $query = 'mutation MyMutation {
+//          bulkOperationRunQuery(query: """
+//            {
+//              products {
+//                edges {
+//                  node {
+//                    id
+//                    title
+//                  }
+//                }
+//              }
+//            }
+//            """) {
+//            bulkOperation {
+//              id
+//              status
+//            }
+//          }
+//        }
+//        ';
+
+        $data = [
+            "query" => $query,
+            "variables" => [
+                "input" => [
+                    'id' => 'gid://shopify/Customer/5172487979180',
+                    'firstName' => 'Anil',
+                    'lastName' => 'Chudasama'
+                ]
+            ]
+        ];
+
+        $customers = Http::withBasicAuth('f7ed5b9c42ce77d3786d1fef142c5ab6', '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')
+            ->post('https://demo-ashish.myshopify.com/admin/api/2021-04/graphql.json', $data);
+        dd($customers->json());
+
         $customers = json_decode($customers->body())->customers;
 
         $products = Http::get($this->prepareUrl('https://{{api_key}}:{{api_password}}@{{store_name}}.myshopify.com/admin/api/{{api_version}}/products.json'));

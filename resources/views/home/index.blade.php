@@ -25,7 +25,7 @@
         <ul>
             @forelse($products as $product)
                 <li class="p-5 border rounded-lg shadow hover:shadow-lg transition  mb-5">{{ $product->title }}
-                    @if(count($products->images) > 0)
+                    @if(count($product->images) > 0)
                     @foreach($product->images as $image)
                     <img class="w-14 inline" src="{{ $image->src }}" alt="">
                     @endforeach
