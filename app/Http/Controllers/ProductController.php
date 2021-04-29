@@ -79,7 +79,7 @@ class ProductController extends Controller
             ]
         ];
 
-        $customers = Http::withBasicAuth('f7ed5b9c42ce77d3786d1fef142c5ab6', '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')
+        $customers = Http::withBasicAuth('YOUR_API', 'YOUR_API_PASSWORD')
             ->post('https://demo-ashish.myshopify.com/admin/api/2021-04/graphql.json', $data);
         dd($customers->json());
 
